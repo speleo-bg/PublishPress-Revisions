@@ -164,8 +164,6 @@ class RevisionaryFront {
 				$datef = __awp( 'M j, Y @ g:i a' );
 				$date = agp_date_i18n( $datef, strtotime( $revision->post_date ) );
 
-				$color = '#ccc';
-
 				$parent = get_post( $revision->post_parent );
 
 				if ( in_array( $revision->post_status, array( 'pending', 'future', 'inherit' ) ) )
