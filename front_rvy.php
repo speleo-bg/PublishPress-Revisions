@@ -191,7 +191,7 @@ class RevisionaryFront {
 						if ( strtotime( $revision->post_date_gmt ) > agp_time_gmt() ) {
 							$class = 'pending_future';
 							$edit_url = 'wp-admin/' . "admin.php?page=rvy-revisions&amp;action=view&amp;revision=$revision_id";
-							$message = sprintf( __('This is a Pending Revision (Scheduled for publication on %s). %s', 'revisionary'), $date, "<span class='rvy_preview_linkspan'><a href='$edit_url'>" . __('Manage', 'revisionary') . '</a></span>' );
+							$message = sprintf( __('This is a Pending Revision (requested publish date: %s). %s', 'revisionary'), $date, "<span class='rvy_preview_linkspan'><a href='$edit_url'>" . __('Edit', 'revisionary') . '</a></span>' );
 							$link_caption = __( 'Schedule', 'revisionary' );
 						} else {
 							$class = 'pending';
@@ -203,7 +203,7 @@ class RevisionaryFront {
 					case 'future' :
 						$class = 'future';
 						$edit_url = 'wp-admin/' . "admin.php?page=rvy-revisions&amp;action=view&amp;revision=$revision_id";
-						$message  = sprintf( __('This is a Scheduled Revision (Scheduled for publication on %s). %s', 'revisionary'), $date, "<span class='rvy_preview_linkspan'><a href='$edit_url'>" . __('Manage', 'revisionary') . '</a></span>' );
+						$message  = sprintf( __('This is a Scheduled Revision (Scheduled for publication on %s). %s', 'revisionary'), $date, "<span class='rvy_preview_linkspan'><a href='$edit_url'>" . __('Edit', 'revisionary') . '</a></span>' );
 						$link_caption = __( 'Publish now', 'revisionary' );
 						break;
 
