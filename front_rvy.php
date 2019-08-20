@@ -185,33 +185,34 @@ class RevisionaryFront {
 					switch ( $revision->post_status ) {
 					case 'publish' :
 					case 'private' :
-						$class = 'published';
-						$link_caption = sprintf( __( 'This Revision was Published on %s', 'revisionary' ), $date );
+						$class   = 'published';
+						$message = sprintf( __( 'This Revision was Published on %s', 'revisionary' ), $date );
 						break;
+
 					case 'pending' :
 						if ( strtotime( $revision->post_date_gmt ) > agp_time_gmt() ) {
 							$class = 'pending_future';
 							$edit_url = 'wp-admin/' . "admin.php?page=rvy-revisions&amp;action=view&amp;revision=$revision_id";
-							$date_msg = sprintf( __('(for publication on %s%s%s)', 'revisionary'), "<a href='$edit_url'>", $date, '</a>' );
-							$link_caption = __( 'Schedule this Pending Revision', 'revisionary' );
+							$message = sprintf( __('This is a Pending Revision (Scheduled for publication on %s). %s', 'revisionary'), $date, "<span class='rvy_preview_linkspan'><a href='$edit_url'>" . __('Manage', 'revisionary') . '</a></span>' );
+							$link_caption = __( 'Schedule', 'revisionary' );
 						} else {
 							$class = 'pending';
-							$date_msg = '';
-							$link_caption = __( 'Publish this Pending Revision now.', 'revisionary' );
+							$message  = __( 'This is a Pending Revision.', 'revisionary' );
+							$link_caption = __( 'Publish now', 'revisionary' );
 						}
 						break;
 
 					case 'future' :
 						$class = 'future';
 						$edit_url = 'wp-admin/' . "admin.php?page=rvy-revisions&amp;action=view&amp;revision=$revision_id";
-						$date_msg = sprintf( __('(already scheduled for publication on %s%s%s)', 'revisionary'), "<a href='$edit_url'>", $date, '</a>' );
-						$link_caption = sprintf( __( 'Publish now', 'revisionary' ), $date );
+						$message  = sprintf( __('This is a Scheduled Revision (Scheduled for publication on %s). %s', 'revisionary'), $date, "<span class='rvy_preview_linkspan'><a href='$edit_url'>" . __('Manage', 'revisionary') . '</a></span>' );
+						$link_caption = __( 'Publish now', 'revisionary' );
 						break;
 
 					case 'inherit' :
 						$class = 'past';
-						$date_msg = sprintf( __('(dated %s)', 'revisionary'), $date );
-						$link_caption = sprintf( __( 'Restore this Past Revision', 'revisionary' ), $date_msg );
+						$message = sprintf( __('This is a Past Revision (dated %s).', 'revisionary'), $date );
+						$link_caption = __( 'Restore', 'revisionary' );
 						break;
 					}
 
@@ -228,7 +229,14 @@ class RevisionaryFront {
 
 					add_action( 'wp_head', 'rvy_front_css' );
 
-					$html = '<div class="rvy_view_revision rvy_view_' . $class . '">' . '<span class="rvy_preview_linkspan"><a href="' . $link . '">' . $link_caption . '</a><span class="rvy_rev_datemsg">'. "$date_msg</span></span></div>";
+					if (isset($link_caption) && !empty($link_caption)) {
+						$message .= '<span class="rvy_preview_linkspan"><a href="' . $link . '">' . $link_caption . '</a></span>';
+					}
+
+					$html = '<div class="rvy_view_revision rvy_view_' . $class . '">' .
+					        '<span class="rvy_preview_msgspan">' . $message . '</span>';
+
+					$html .= '</div>';
 
 					new RvyScheduledHtml( $html, 'wp_head', 99 );  // this should be inserted at the top of <body> instead, but currently no way to do it
 				}
@@ -241,13 +249,14 @@ class RevisionaryFront {
 			if ( ! empty($wp_query->queried_object_id) ) {
 				load_plugin_textdomain('revisionary', false, RVY_FOLDER . '/languages');
 
-				$link_caption = __( 'Current Revision', 'revisionary' );
+				$message      = __( 'This is a Current Revision.', 'revisionary' );
+				$link_caption = __( 'Edit', 'revisionary' );
 
 				$link = get_edit_post_link($wp_query->queried_object_id, 'url');
 
 				add_action( 'wp_head', 'rvy_front_css' );
 
-				$html = '<div class="preview_approval_rvy"><span class="rvy_preview_linkspan"><a href="' . $link . '">' . $link_caption . '</a></span></div>';
+				$html = '<div class="preview_approval_rvy"><span class="rvy_preview_msgspan">' . $message . '</span><span class="rvy_preview_linkspan"><a href="' . $link . '">' . $link_caption . '</a></span></div>';
 
 				new RvyScheduledHtml( $html, 'template_redirect' );
 			}
