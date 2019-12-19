@@ -2,9 +2,9 @@
 Contributors: publishpress, kevinB, stevejburge, andergmartins
 Tags: revision, access, permissions, cms, user, groups, members, admin, pages, posts, page, Post
 Requires at least: 4.9.7
-Tested up to: 5.2.4
+Tested up to: 5.3
 Requires PHP: 5.6.20
-Stable Tag: 2.0.10
+Stable Tag: 2.0.12
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -61,6 +61,9 @@ For more details about both the free and pro version, see our <a href="https://p
 12. Scheduled Revisions in Publishing Soon list
 
 == Changelog ==
+
+= 2.0.12 - 29 Oct 2019 =
+* Fixed : Fatal error on Post Preview
 
 = 2.0.11 - 28 Oct 2019 =
 * Fixed : Classic Editor - Post Preview showed last stored copy, not unsaved changes

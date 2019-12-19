@@ -5,7 +5,7 @@
  * Description: Maintain published content with teamwork and precision using the Revisions model to submit, approve and schedule changes.
  * Author: PublishPress
  * Author URI: https://publishpress.com
- * Version: 2.0.11
+ * Version: 2.0.12
  * Text Domain: revisionary
  * Domain Path: /languages/
  * Min WP Version: 4.9.7
@@ -96,7 +96,7 @@ define('REVISIONARY_FILE', __FILE__);
 register_activation_hook(__FILE__, function() 
 	{
 		// mirror to REVISIONARY_VERSION
-		update_option('revisionary_last_version', '2.0.11');
+		update_option('revisionary_last_version', '2.0.12');
 
 		// force this timestamp to be regenerated, in case something went wrong before
 		delete_option( 'rvy_next_rev_publish_gmt' );
@@ -106,6 +106,13 @@ register_activation_hook(__FILE__, function()
 		}
 
 		new RevisionaryActivation(['import_legacy' => true]);
+	}
+);
+
+register_deactivation_hook(__FILE__, function()
+	{
+		$timestamp = wp_next_scheduled('rvy_mail_queue_hook');
+   		wp_unschedule_event( $timestamp,'rvy_mail_queue_hook');
 	}
 );
 
@@ -152,7 +159,7 @@ add_action(
 			return;
 		}
 
-		define('REVISIONARY_VERSION', '2.0.11');
+		define('REVISIONARY_VERSION', '2.0.12');
 
 		if ( ! defined( 'RVY_VERSION' ) ) {
 			define( 'RVY_VERSION', REVISIONARY_VERSION );  // back compat
